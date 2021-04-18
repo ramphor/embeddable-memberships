@@ -1,0 +1,19 @@
+{
+    "name": "ramphor/memberships",
+    "description": "Embed memberships for WordLand theme and plugins",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Puleeno Nguyen",
+            "email": "puleeno@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ramphor\\Memberships\\": "./src/"
+        }
+    }
+}
