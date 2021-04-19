@@ -1,12 +1,16 @@
 <?php
 namespace Ramphor\Memberships;
 
+use Ramphor\Memberships\Admin\PostTypesHeader;
+use Ramphor\Memberships\Admin\ProfileFields;
+
 class Memberships
 {
     protected static $instances = array();
 
     protected $id;
     protected $parentMenu;
+    protected $profileFieldsEnabled = false;
     protected $options = array();
 
     private function __construct($id)
@@ -37,9 +41,17 @@ class Memberships
 
     public function run()
     {
-        $postType = new PostType($this);
+        new PostType($this);
+        new PostTypesHeader($this);
 
-        add_action('admin_menu', array($this, 'registerAdminMenu'));
+        add_action(
+            'admin_menu',
+            array($this, 'registerAdminMenu')
+        );
+
+        if ($this->profileFieldsEnabled) {
+            new ProfileFields($this);
+        }
     }
 
     public function registerAdminMenu()
@@ -69,5 +81,10 @@ class Memberships
     public function getParentMenu()
     {
         return $this->parentMenu;
+    }
+
+    public function enableProfileFields()
+    {
+        $this->profileFieldsEnabled = true;
     }
 }
