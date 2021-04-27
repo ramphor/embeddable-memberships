@@ -81,7 +81,7 @@ class Memberships
             sprintf(
                 '/edit.php?post_type=%s_%s',
                 $this->id,
-                $this->is_active_add_members_feature() ? 'user_membership' : 'membership_plan'
+                'membership_plan'
             )
         );
     }
