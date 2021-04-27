@@ -7,6 +7,8 @@ class General extends MetaboxTab
 {
     const TAB_NAME = 'general';
 
+    protected $post;
+
     public function get_name()
     {
         return static::TAB_NAME;
@@ -22,8 +24,9 @@ class General extends MetaboxTab
         return '<span class="dashicons dashicons-admin-tools"></span>';
     }
 
-    public function render($post)
+    protected function renderSlugEdit()
     {
+        $post = $this->post;
         ?>
         <div class="options_group">
             <p class="form-field post_name_field ">
@@ -31,6 +34,12 @@ class General extends MetaboxTab
                 <input id="post_name" type="text" class="short" name="post_name" value="<?php echo $post->post_name; ?>" />
             </p>
         </div>
+        <?php
+    }
+
+    protected function grantPlanAccess()
+    {
+        ?>
         <div class="options_group">
             <p class="form-field plan-access-method-field">
                 <label for="_access_method">Grant access upon</label>
@@ -58,5 +67,27 @@ class General extends MetaboxTab
             </p>
         </div>
         <?php
+    }
+
+    protected function membershipExpireDate()
+    {
+    }
+
+    public function renderAfterGeneralTabContent()
+    {
+        do_action(
+            "{$this->workspace}_membership_plan_after_general_tab_content",
+            $this->post
+        );
+    }
+
+    public function render($post)
+    {
+        $this->post = $post;
+
+        $this->renderSlugEdit();
+        $this->grantPlanAccess();
+        $this->membershipExpireDate();
+        $this->renderAfterGeneralTabContent();
     }
 }

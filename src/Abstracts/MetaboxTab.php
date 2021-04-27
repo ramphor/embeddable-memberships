@@ -5,6 +5,13 @@ use Ramphor\Memberships\Interfaces\MetaboxTab as MetaboxTabInterface;
 
 abstract class MetaboxTab implements MetaboxTabInterface
 {
+    protected $workspace;
+
+    public function setWorkspace($workspaceId)
+    {
+        $this->workspace = $workspaceId;
+    }
+
     public function get_icon()
     {
     }

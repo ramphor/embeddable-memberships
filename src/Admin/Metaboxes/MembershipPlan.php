@@ -44,6 +44,11 @@ class MembershipPlan
                 ));
                 continue;
             }
+            $tabInstance->setWorkspace($this->membershipId);
+            $bootstrap = array($tabInstance, 'bootstrap');
+            if (is_callable($bootstrap)) {
+                add_action('init', $bootstrap, 50);
+            }
             array_push($this->tabInstances, $tabInstance);
         }
     }
