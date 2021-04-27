@@ -48,7 +48,7 @@ class MembershipPlan
         }
     }
 
-    public function register_meta_boxes()
+    public function register_meta_boxes($post_type)
     {
         add_meta_box(
             "{$this->memebershipId}_plan_data",
@@ -60,27 +60,35 @@ class MembershipPlan
         );
     }
 
-    public function render()
+    public function render($post)
     {
         ?>
             <div class="panel-wrap data">
                 <ul class="membership_plan_data_tabs membership-tabs">
                 <?php foreach ($this->tabInstances as $tabInstance) :
+                    $tab_icon = $tabInstance->get_icon();
                     $tab_name = esc_attr($tabInstance->get_name());
                     ?>
                     <li class="<?php echo $tab_name; ?>_options <?php echo $tab_name; ?>_tab">
-                        <a href="#membership-plan-data-<?php echo $tab_name; ?>"><span><?php echo $tabInstance->get_title(); ?></span></a>
+                        <a href="#membership-plan-data-<?php echo $tab_name; ?>">
+                        <?php if ($tab_icon) : ?>
+                            <span class="tab-icon"><?php echo $tab_icon; ?></span>
+                        <?php endif; ?>
+                            <span><?php echo $tabInstance->get_title(); ?></span>
+                        </a>
                     </li>
                 <?php endforeach; ?>
                 </ul>
 
+                <div class="ramphor-memberships-panels">
                 <?php foreach ($this->tabInstances as $tabInstance) :
                     $tab_name = esc_attr($tabInstance->get_name());
                     ?>
-                    <div id="membership-plan-data-<?php echo $tab_name; ?>" class="panel woocommerce_options_panel">
-                        <?php $tabInstance->render(); ?>
+                    <div id="membership-plan-data-<?php echo $tab_name; ?>" class="panel ramphor-memberships-panel">
+                        <?php $tabInstance->render($post); ?>
                     </div><!-- //#membership-plan-data-<?php echo $tab_name; ?> -->
                 <?php endforeach; ?>
+                </div>
                 <div class="clear"></div>
             </div>
         <?php

@@ -1,0 +1,28 @@
+{
+  "name": "@ramphor/memberships",
+  "version": "1.0.0",
+  "description": "## Use Memeberships class in PHP header file ``` use Ramphor\\Memberships\\Memberships; ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramphor/embeddable-memberships.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ramphor/embeddable-memberships/issues"
+  },
+  "homepage": "https://github.com/ramphor/embeddable-memberships#readme",
+  "dependencies": {
+    "formvalidation": "*"
+  },
+  "devDependencies": {
+    "sass": "^1.32.11",
+    "sass-loader": "^11.0.1",
+    "webpack": "^5.36.0",
+    "webpack-cli": "^4.6.0"
+  }
+}

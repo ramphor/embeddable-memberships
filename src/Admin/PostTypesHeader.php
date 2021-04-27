@@ -59,7 +59,11 @@ class PostTypesHeader
                     'all_admin_notices',
                     array($this, 'renderMembershipMenuToolBar')
                 );
-            } elseif ($currentScreen->action === 'add') {
+            } elseif ($currentScreen->base === 'post') {
+                remove_all_filters('pre_get_shortlink');
+                remove_all_filters('get_shortlink');
+                add_filter('get_sample_permalink_html', '__return_empty_string');
+
                 add_filter('admin_body_class', function ($classes) {
                     return $classes .= ' ramphor_memberships';
                 });

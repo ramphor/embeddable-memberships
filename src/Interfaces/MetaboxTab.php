@@ -7,7 +7,7 @@ interface MetaboxTab
 
     public function get_title();
 
-    public function render();
+    public function render($post);
 
     public function save($post_id, $post);
 }
