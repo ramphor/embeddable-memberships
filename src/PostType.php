@@ -52,7 +52,7 @@ class PostType
             'public' => true,
             'show_in_menu' => is_null($parentMenu),
         );
-        register_post_type("{$id}_membership", apply_filters(
+        register_post_type("{$id}_user_membership", apply_filters(
             "ramphor_memberships_{$id}_post_type_args",
             $args
         ));

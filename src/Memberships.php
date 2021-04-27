@@ -7,7 +7,7 @@ use Ramphor\Memberships\Admin\Metaboxes\MembershipPlan as MembershipPlanMetabox;
 
 class Memberships
 {
-    const LIB_VERSION = '1.0.0.12';
+    const LIB_VERSION = '1.0.0.21';
 
     protected static $instances = array();
     protected static $calledScripts = false;
@@ -78,7 +78,7 @@ class Memberships
             $this->options['page_title'],
             $this->options['menu_title'],
             'manage_options',
-            sprintf('/edit.php?post_type=%s_membership', $this->id)
+            sprintf('/edit.php?post_type=%s_user_membership', $this->id)
         );
     }
 

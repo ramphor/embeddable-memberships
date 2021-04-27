@@ -17,7 +17,7 @@ class PostTypesHeader
         $this->postTypes = array_map(function ($type) {
             return "{$this->membershipId}_{$type}";
         }, array(
-            'membership',
+            'user_membership',
             'membership_plan',
         ));
 
@@ -54,12 +54,11 @@ class PostTypesHeader
     {
         $currentScreen = get_current_screen();
         if (isset($currentScreen->post_type) && in_array($currentScreen->post_type, $this->postTypes)) {
-            if ($currentScreen->base === 'edit') {
-                add_action(
-                    'all_admin_notices',
-                    array($this, 'renderMembershipMenuToolBar')
-                );
-            } elseif ($currentScreen->base === 'post') {
+            add_action(
+                'all_admin_notices',
+                array($this, 'renderMembershipMenuToolBar')
+            );
+            if ($currentScreen->base === 'post') {
                 remove_all_filters('pre_get_shortlink');
                 remove_all_filters('get_shortlink');
                 add_filter('get_sample_permalink_html', '__return_empty_string');

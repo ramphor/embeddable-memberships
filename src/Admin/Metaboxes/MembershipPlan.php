@@ -7,7 +7,7 @@ use Ramphor\Memberships\Admin\Metaboxes\Tabs\General;
 
 class MembershipPlan
 {
-    protected $memebershipId;
+    protected $membershipId;
     protected $tabInstances = array();
 
     public function __construct($memebership)
@@ -24,7 +24,7 @@ class MembershipPlan
 
     public function createMetaboxTabInstances()
     {
-        $tabs = apply_filters("{$this->memebershipId}_metabox_tabs", array(
+        $tabs = apply_filters("{$this->membershipId}_membership_plan_metabox_tabs", array(
             General::TAB_NAME => General::class,
         ));
 
@@ -51,7 +51,7 @@ class MembershipPlan
     public function register_meta_boxes($post_type)
     {
         add_meta_box(
-            "{$this->memebershipId}_plan_data",
+            "{$this->membershipId}-membership-plan-data",
             __('Membership Plan Data', 'ramphor_memberships'),
             array($this, 'render'),
             "{$this->membershipId}_membership_plan",
