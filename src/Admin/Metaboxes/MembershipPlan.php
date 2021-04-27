@@ -4,6 +4,7 @@ namespace Ramphor\Memberships\Admin\Metaboxes;
 use Ramphor\Memberships\Memberships;
 use Ramphor\Memberships\Abstracts\MetaboxTab;
 use Ramphor\Memberships\Admin\Metaboxes\Tabs\General;
+use Ramphor\Memberships\Admin\Metaboxes\Tabs\RestrictContent;
 
 class MembershipPlan
 {
@@ -24,9 +25,13 @@ class MembershipPlan
 
     public function createMetaboxTabInstances()
     {
-        $tabs = apply_filters("{$this->membershipId}_membership_plan_metabox_tabs", array(
+        $tabs = array(
             General::TAB_NAME => General::class,
-        ));
+        );
+        if (apply_filters("{$this->membershipId}_membership_plan_enable_restrict_content_box", false)) {
+            $tabs[RestrictContent::TAB_NAME] = RestrictContent::class;
+        }
+        $tabs = apply_filters("{$this->membershipId}_membership_plan_metabox_tabs", $tabs);
 
         foreach ($tabs as $tab) {
             if (!class_exists($tab)) {
