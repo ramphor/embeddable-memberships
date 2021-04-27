@@ -31,7 +31,13 @@ class General extends MetaboxTab
         <div class="options_group">
             <p class="form-field post_name_field ">
                 <label for="post_name"><?php echo __('Slug'); ?></label>
-                <input id="post_name" type="text" class="short" name="post_name" value="<?php echo $post->post_name; ?>" />
+                <input
+                    id="post_name"
+                    type="text"
+                    class="short"
+                    name="post_name"
+                    value="<?php echo $post->post_name; ?>"
+                />
             </p>
         </div>
         <?php
@@ -39,30 +45,31 @@ class General extends MetaboxTab
 
     protected function grantPlanAccess()
     {
+        $access_methods = apply_filters("{$this->workspace}_general_access_methods", array(
+            'manual-only' => __('manual assignment only', 'ramphor_memberships'),
+            'signup' => __('user account registration', 'ramphor_memberships')
+        ));
+        $current_method = get_post_meta($this->post->ID, '_access_method', true);
+        if (!$current_method) {
+            $current_method = array_key_first($access_methods);
+        }
+
         ?>
         <div class="options_group">
             <p class="form-field plan-access-method-field">
                 <label for="_access_method">Grant access upon</label>
                 <span class="plan-access-method-selectors">
+                    <?php foreach ($access_methods as $access_method => $label) : ?>
                     <label class="label-radio">
                         <input
                             type="radio"
                             name="_access_method"
-                            class="js-access-method-selector js-access-method-type"
-                            value="manual-only"
-                            checked="checked"
+                            value="<?php echo esc_attr($access_method); ?>"
+                            <?php checked($access_method, $current_method); ?>
                         >
-                        manual assignment only
+                        <?php echo esc_html($label); ?>
                     </label>
-                    <label class="label-radio">
-                        <input
-                            type="radio"
-                            name="_access_method"
-                            class="js-access-method-selector js-access-method-type"
-                            value="signup"
-                        >
-                        user account registration
-                    </label>
+                    <?php endforeach; ?>
                 </span>
             </p>
         </div>
@@ -89,5 +96,12 @@ class General extends MetaboxTab
         $this->grantPlanAccess();
         $this->membershipExpireDate();
         $this->renderAfterGeneralTabContent();
+    }
+
+    public function save($post_id, $post)
+    {
+        if (isset($_POST['_access_method'])) {
+            update_post_meta($post_id, '_access_method', $_POST['_access_method']);
+        }
     }
 }

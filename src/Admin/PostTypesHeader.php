@@ -14,12 +14,16 @@ class PostTypesHeader
             return;
         }
         $this->membershipId = $membershipInstance->getId();
+
+        $types = array(
+            'membership_plan'
+        );
+        if ($membershipInstance->is_active_add_members_feature()) {
+            array_unshift($types, 'user_membership');
+        }
         $this->postTypes = array_map(function ($type) {
             return "{$this->membershipId}_{$type}";
-        }, array(
-            'user_membership',
-            'membership_plan',
-        ));
+        }, $types);
 
         add_action('current_screen', array($this, 'init'));
     }

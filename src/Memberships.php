@@ -78,7 +78,11 @@ class Memberships
             $this->options['page_title'],
             $this->options['menu_title'],
             'manage_options',
-            sprintf('/edit.php?post_type=%s_user_membership', $this->id)
+            sprintf(
+                '/edit.php?post_type=%s_%s',
+                $this->id,
+                $this->is_active_add_members_feature() ? 'user_membership' : 'membership_plan'
+            )
         );
     }
 
@@ -125,5 +129,13 @@ class Memberships
         );
 
         wp_enqueue_style('ramphor-memberships');
+    }
+
+    public function is_active_add_members_feature()
+    {
+        return apply_filters(
+            "{$this->id}_memberships_active_add_members_feature",
+            true
+        );
     }
 }
