@@ -22,8 +22,8 @@ class PostType
         $parentMenu = $this->membership->getParentMenu();
 
         $labels = array(
-            'name'                  => _x('Memberships', 'Post type general name', 'ramphor_memberships'),
-            'singular_name'         => _x('Membership', 'Post type singular name', 'ramphor_memberships'),
+            'name'                  => _x('Members', 'Post type general name', 'ramphor_memberships'),
+            'singular_name'         => _x('Member', 'Post type singular name', 'ramphor_memberships'),
             'menu_name'             => _x('Memberships', 'Admin Menu text', 'ramphor_memberships'),
             'name_admin_bar'        => _x('Membership', 'Add New on Toolbar', 'ramphor_memberships'),
             'add_new'               => __('Add New', 'ramphor_memberships'),
@@ -88,6 +88,7 @@ class PostType
             'labels' => $labels,
             'public' => true,
             'show_in_menu' => false,
+            'supports' => array('title')
         );
         register_post_type("{$id}_membership_plan", apply_filters(
             "ramphor_memberships_{$id}_plan_post_type_args",

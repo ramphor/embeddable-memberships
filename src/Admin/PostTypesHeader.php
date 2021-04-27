@@ -21,7 +21,7 @@ class PostTypesHeader
             'membership_plan',
         ));
 
-        add_action('admin_init', array($this, 'init'));
+        add_action('current_screen', array($this, 'init'));
     }
 
     protected function createHeaderMenuItemClasses($needed, $currentScreen, $type = 'post_type')
@@ -32,10 +32,11 @@ class PostTypesHeader
         }
     }
 
-    protected function createHeaderMenuItems($currentScreen)
+    protected function createHeaderMenuItems()
     {
         global $wp_post_types;
         $menuItems = array();
+        $currentScreen = get_current_screen();
         foreach ($this->postTypes as $postType) {
             $postTypeObject = get_post_type_object($postType);
 
@@ -51,20 +52,24 @@ class PostTypesHeader
 
     public function init()
     {
-        add_action(
-            'all_admin_notices',
-            array($this, 'renderMembershipMenuToolBar')
-        );
+        $currentScreen = get_current_screen();
+        if (isset($currentScreen->post_type) && in_array($currentScreen->post_type, $this->postTypes)) {
+            if ($currentScreen->base === 'edit') {
+                add_action(
+                    'all_admin_notices',
+                    array($this, 'renderMembershipMenuToolBar')
+                );
+            } elseif ($currentScreen->action === 'add') {
+                add_filter('admin_body_class', function ($classes) {
+                    return $classes .= ' ramphor_memberships';
+                });
+            }
+        }
     }
 
     public function renderMembershipMenuToolBar()
     {
-        $currentScreen = get_current_screen();
-        $isMembershipsPostTypes = ($currentScreen->base === 'edit' && in_array($currentScreen->post_type, $this->postTypes));
-        if (!($isMembershipsPostTypes)) {
-            return;
-        }
-        $menuItems = $this->createHeaderMenuItems($currentScreen);
+        $menuItems = $this->createHeaderMenuItems();
 
         ?>
         <div class="wrap ramphor-memberships">
