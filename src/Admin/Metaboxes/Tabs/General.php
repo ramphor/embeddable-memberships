@@ -76,8 +76,26 @@ class General extends MetaboxTab
         <?php
     }
 
-    protected function membershipExpireDate()
+    public function membershipExpireDate()
     {
+        $expirations = array(
+            'unlimited' => __('unlimited', 'ramphor_memberships'),
+            'specific' => __('specific length', 'ramphor_memberships'),
+            'fixed_dates' => __('fixed dates', 'ramphor_memberships'),
+        );
+        ?>
+        <p>
+            <label for="">Membership Expiration</label>
+            <span>
+            <?php foreach($expirations as $expiration => $label): ?>
+                <label>
+                    <input type="radio">
+                    unlimited
+                </label>
+            <?php endforeach; ?>
+            </span>
+        </p>
+        <?php
     }
 
     public function renderAfterGeneralTabContent()
