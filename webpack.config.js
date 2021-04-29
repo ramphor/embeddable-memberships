@@ -1,12 +1,10 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-process.chdir(path.resolve('./assets/src'));
-
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        memberships: ['./admin/memberships.js', './admin/memberships.scss'],
+        memberships: ['./assets/src/admin/memberships.js', './assets/src/admin/memberships.scss'],
     },
     output: {
         path: path.resolve(__dirname, 'assets'),
@@ -34,7 +32,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: process.env.NODE_ENV === 'production' ? 'admin/css/[name].min.css' : 'admin/css/[name].css',
+            filename: process.env.NODE_ENV === 'production' ? 'admin/css/[name].min.css' : 'admin/css/[name].css'
         })
     ]
 }

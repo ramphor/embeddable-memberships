@@ -78,23 +78,104 @@ class General extends MetaboxTab
 
     public function membershipExpireDate()
     {
+        $post_id = $this->post->ID;
         $expirations = array(
             'unlimited' => __('unlimited', 'ramphor_memberships'),
             'specific' => __('specific length', 'ramphor_memberships'),
             'fixed_dates' => __('fixed dates', 'ramphor_memberships'),
         );
+        $current_expiration = get_post_meta($post_id, '_membership_expiration', true);
+        if (!$current_expiration) {
+            $current_expiration = array_key_first($expirations);
+        }
+
+        $membership_expiration_length = get_post_meta($post_id, '_membership_expiration_length', true);
+        $expiration_length_types = array(
+            'day' => __('Days', 'ramphor_memberships'),
+            'month' => __('Months', 'ramphor_memberships'),
+            'year' => __('Years', 'ramphor_memberships')
+        );
+        $current_expiration_length_type = get_post_meta(
+            $post_id,
+            '_expiration_length_type',
+            true
+        );
+
+        $membership_fixed_start_date = get_post_meta($post_id, '_membership_fixed_start_date', true);
+        if (!$membership_fixed_start_date) {
+            $membership_fixed_start_date = date('Y/m/d');
+        }
+        $membership_fixed_end_date = get_post_meta($post_id, '_membership_fixed_end_date', true);
+        if (!$membership_fixed_end_date) {
+            $membership_fixed_end_date = date('Y/m/d', strtotime("+1 day"));
+        }
         ?>
-        <p>
-            <label for="">Membership Expiration</label>
+        <div>
+            <label for=""><?php echo esc_html(__('Membership Expiration', 'ramphor_memberships')); ?></label>
             <span>
-            <?php foreach($expirations as $expiration => $label): ?>
+            <?php foreach ($expirations as $expiration => $label) : ?>
                 <label>
-                    <input type="radio">
-                    unlimited
+                    <input
+                        id="membership-expiration-<?php echo esc_attr($expiration); ?>"
+                        type="radio"
+                        name="membership_expiration"
+                        value="<?php echo esc_attr($expiration); ?>"
+                        <?php checked($expiration, $current_expiration); ?>
+                    />
+                    <?php echo $label; ?>
                 </label>
             <?php endforeach; ?>
             </span>
-        </p>
+
+            <div class="expiration-option specific-length" data-require="membership_expiration" data-require-value="specific">
+                <div class="length-inputs">
+                    <input
+                        type="text"
+                        name="membership_expiration_length"
+                        value="<?php echo $membership_expiration_length ?>"
+                    />
+                    <select name="membership_expiration_length_type">
+                        <?php foreach ($expiration_length_types as $expiration_length_type => $label) : ?>
+                        <option value="<?php echo $expiration_length_type; ?>"<?php selected($expiration_length_type, $current_expiration_length_type); ?>>
+                            <?php echo esc_html($label); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="expiration-option fixed-dates" data-require="membership_expiration" data-require-value="fixed_dates">
+                <div class="start-date">
+                    <label for=""><?php echo esc_html(__('Start date', 'ramphor_memberships')); ?></label>
+                    <input
+                        class="v-datepicker"
+                        type="text"
+                        name="membership_fixed_start_date"
+                        value="<?php echo esc_attr($membership_fixed_start_date); ?>"
+                    />
+                    <span class="date-format">
+                        <code>YYYY-MM-DD</code>
+                    </span>
+                </div>
+
+                <input
+                    type="hidden"
+                />
+
+                <div class="end-date">
+                    <label for=""><?php echo esc_html(__('End date', 'ramphor_memberships')); ?></label>
+                    <input
+                        class="v-datepicker"
+                        type="text"
+                        name="membership_fixed_end_date"
+                        value="<?php echo esc_attr($membership_fixed_end_date); ?>"
+                    />
+                    <span class="date-format">
+                        <code>YYYY-MM-DD</code>
+                    </span>
+                </div>
+            </div>
+        </div>
         <?php
     }
 
@@ -120,6 +201,23 @@ class General extends MetaboxTab
     {
         if (isset($_POST['_access_method'])) {
             update_post_meta($post_id, '_access_method', $_POST['_access_method']);
+        }
+
+        if (isset($_POST['membership_expiration'])) {
+            update_post_meta($post_id, '_membership_expiration', $_POST['membership_expiration']);
+        }
+
+        if (isset($_POST['membership_expiration_length'])) {
+            update_post_meta($post_id, '_membership_expiration_length', $_POST['membership_expiration_length']);
+        }
+        if (isset($_POST['membership_expiration_length_type'])) {
+            update_post_meta($post_id, '_expiration_length_type', $_POST['membership_expiration_length_type']);
+        }
+        if (isset($_POST['membership_fixed_start_date'])) {
+            update_post_meta($post_id, '_membership_fixed_start_date', $_POST['membership_fixed_start_date']);
+        }
+        if (isset($_POST['membership_fixed_end_date'])) {
+            update_post_meta($post_id, '_membership_fixed_end_date', $_POST['membership_fixed_end_date']);
         }
     }
 }

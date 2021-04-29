@@ -7,7 +7,7 @@ use Ramphor\Memberships\Admin\Metaboxes\MembershipPlan as MembershipPlanMetabox;
 
 class Memberships
 {
-    const LIB_VERSION = '1.0.0.21';
+    const LIB_VERSION = '1.0.0.22';
 
     protected static $instances = array();
     protected static $calledScripts = false;
@@ -26,7 +26,7 @@ class Memberships
         }
 
         if (is_admin() && !static::$calledScripts) {
-            add_action('admin_enqueue_scripts', array($this, 'registerScripts'));
+            add_action('admin_enqueue_scripts', array($this, 'registerScripts'), 40);
             static::$calledScripts = true;
         }
     }
@@ -122,13 +122,29 @@ class Memberships
     public function registerScripts()
     {
         wp_register_style(
-            'ramphor-memberships',
-            $this->asset_url('admin/memberships.css'),
+            'vanillajs-datepicker',
+            $this->asset_url('vendors/vanillajs-datepicker/css/datepicker.min.css'),
             array(),
+            '1.1.4'
+        );
+        wp_register_style(
+            'ramphor-memberships',
+            $this->asset_url('admin/css/memberships.css'),
+            array(
+                'vanillajs-datepicker'
+            ),
             static::LIB_VERSION
         );
 
         wp_enqueue_style('ramphor-memberships');
+
+        wp_register_script(
+            'ramphor-memberships',
+            $this->asset_url('admin/memberships.js'),
+            array(),
+            static::LIB_VERSION
+        );
+        wp_enqueue_script('ramphor-memberships');
     }
 
     public function is_active_add_members_feature()

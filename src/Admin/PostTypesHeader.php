@@ -68,7 +68,7 @@ class PostTypesHeader
                 add_filter('get_sample_permalink_html', '__return_empty_string');
 
                 add_filter('admin_body_class', function ($classes) {
-                    return $classes .= ' ramphor_memberships';
+                    return $classes .= ' ramphor-memberships';
                 });
             }
         }
